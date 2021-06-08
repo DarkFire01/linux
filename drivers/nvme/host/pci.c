@@ -1595,7 +1595,7 @@ static int nvme_queue_request_irq(struct nvme_queue *nvmeq)
 				       nvmeq->qid);
 
 	return request_threaded_irq(nvmeq->dev->platform_irq, handler,
-				    thread_fn, 0, "nvme", nvmeq);
+				    thread_fn, IRQF_SHARED, "nvme", nvmeq);
 }
 
 static void nvme_init_queue(struct nvme_queue *nvmeq, u16 qid)
@@ -2189,7 +2189,7 @@ static int nvme_setup_irqs(struct nvme_dev *dev, unsigned int nr_io_queues)
 	 * platform devices only support a single queue and no affinity for now
 	 */
 	if (!pdev)
-		return 0;
+		return 1;
 
 	return pci_alloc_irq_vectors_affinity(pdev, 1, irq_queues,
 			      PCI_IRQ_ALL_TYPES | PCI_IRQ_AFFINITY, &affd);
@@ -2848,6 +2848,7 @@ static struct nvme_dev *nvme_dev_alloc(struct device *parent)
 	if (!dev)
 		return NULL;
 
+	dev->dev = get_device(parent);
 	dev->nr_write_queues = write_queues;
 	dev->nr_poll_queues = poll_queues;
 	dev->nr_allocated_queues = nvme_max_io_queues(dev) + 1;
