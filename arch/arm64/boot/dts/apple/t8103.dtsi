@@ -154,8 +154,6 @@
 			interrupt-controller;
 			reg = <0x2 0x3b100000 0x0 0x8000>;
 		};
-<<<<<<< HEAD
-=======
 
 		dwc3_0_dart_0: iommu@382f00000 {
 			compatible = "apple,t8103-dart";
@@ -302,6 +300,5 @@
 			interrupts = <13 8>;
 		    };
 		};
->>>>>>> e76b1ef95a7f (pinctrl-apple-gpio now compiling)
 	};
 };
